@@ -1,2 +1,5 @@
-# customBin
-Learning Bash, one shell script at a time.
+# custom_bin
+
+A personal project to learn Bash scripting by writing one custom script a day.
+
+Each script lives in this repo and serves as daily practice to build and sharpen shell scripting skills.
