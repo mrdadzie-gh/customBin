@@ -1,4 +1,4 @@
-# custom_bin
+# customBin
 
 A personal project to learn Bash scripting by writing one custom script a day.
 
