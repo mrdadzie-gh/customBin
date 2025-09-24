@@ -1,0 +1,31 @@
+#!/bin/bash
+
+
+prompt_password() {
+  read -sp "Enter a password: " user_pw
+  echo "$user_pw"
+}
+
+create_user() {
+  local username=$1
+  echo "Checking user: $username"
+  if grep -q "^$username:" /etc/passwd ; then
+	echo "User $username already exists on $HOSTNAME"
+  else
+	echo "Creating user $username"
+	sudo useradd -s /bin/bash -m $username
+	echo "$username:$new_pw" | sudo chpasswd
+  fi
+}
+
+new_pw=$(prompt_password)
+if [[ $# -eq 0 ]]
+then
+	read -p "Enter a username: " user_name
+	create_user $user_name
+else
+	for u in $@ ; do
+		user_name=$u
+		create_user $user_name
+	done
+fi
