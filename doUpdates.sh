@@ -55,7 +55,7 @@ mit()
 check=0
 doReboot=0
 needsReboot=0
-updatesAvailable=0
+status=0
 updatesFile="/tmp/updates.list"
 
 # Ensure only root or user with elevated privileges can run this script
@@ -85,16 +85,20 @@ while getopts ":chlr" option; do
 done
 
 # Main body of script
-dnf check-update > $updatesFile
-updatesAvailable=$?
-if [[ $updatesAvailable -eq 0 ]]
-then
-	echo
-	echo "Updates are NOT available for host $HOSTNAME at this time."
-else
-	echo
-	echo "Updates ARE available for host $HOSTNAME."
-fi
+dnf check-update > $updatesFile 2>&1
+status=$?
+
+case "$status" in
+    0)
+        echo "Updates are NOT available for host $HOSTNAME at this time."
+        ;;
+    100)
+        echo "Updates ARE available for host $HOSTNAME"
+        ;;
+    *)
+        echo "Error: unexpected exit code ($status) returned by dnf check-update on $HOSTNAME"
+        ;;
+esac
 
 if [[ $check -eq 1 ]] 
 then
